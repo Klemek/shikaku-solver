@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Vue</title>
+  <script src=""></script>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="solver.js"></script>
+  <script src="samples.js"></script>
+  <script src="main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <table>
+      <tr v-for="row,x in table">
+        <td v-for="v,y in row" v-bind:style="getStyle(x,y)">{{getCell(v)}}</td>
+      </tr>
+    </table>
+    <h3>Iterations : {{processed()}}<br>Queued : {{queue()}}</h3>
+  </div>
+  <script>
+    app = new Vue(app);
+  </script>
+</body>
+</html>

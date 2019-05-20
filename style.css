@@ -1,0 +1,24 @@
+body {
+    background-color:#212121;
+    color:#EEEEEE;
+    text-align:center;
+    font-family: "Trebuchet MS", serif;
+    display: grid;
+    height: 100vh;
+    margin: 0;
+    place-items: center center;
+}
+
+table{
+    border-collapse: collapse;
+    border:2px solid #616161;
+}
+
+td{
+    width:20px;
+    height:20px;
+    max-width:20px;
+    text-align:center;
+    overflow: hidden;
+    font-size:.8em;;
+}

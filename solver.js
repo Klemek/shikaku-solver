@@ -58,6 +58,14 @@ const solver = (function(){
     return spaces;
   };
 
+  const shuffle = function (a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
   let self = {
     solved:[],
     processed:0,
@@ -133,6 +141,8 @@ const solver = (function(){
       numbers = numbers.sort((a,b) => a.p-b.p);
 
       if(numbers.length > 0){
+        let target = numbers[0].p;
+        numbers = shuffle(numbers.filter(x => x.p === target));
         if(debug)
           console.log(numbers[0].x,numbers[0].y,numbers[0].m, numbers[0].p);
         numbers[0].spaces.forEach(function(space){

@@ -4,6 +4,7 @@
 let app = {
   el: '#app',
   data: {
+    name:'',
     table: [],
     background: [],
     colors: {},
@@ -36,6 +37,7 @@ let app = {
     start: function(){
       const self = this;
       self.sample = (self.sample+1)%samples.length;
+      self.name = samples[self.sample].name;
       let c = self.shuffle(colors);
       for(let i = 0; i < 26; i++){
         self.colors[String.fromCharCode(65+i)] = c[i];

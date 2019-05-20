@@ -18,7 +18,7 @@
         <td v-for="v,y in row" v-bind:style="getStyle(x,y)">{{getCell(v)}}</td>
       </tr>
     </table>
-    <h3>Iterations : {{processed()}}<br>Queued : {{queue()}}</h3>
+    <h3>{{name}}<br>Iterations : {{processed()}}<br>Queued : {{queue()}}</h3>
   </div>
   <script>
     app = new Vue(app);

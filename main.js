@@ -16,9 +16,8 @@ let app = {
     getCell: v => /\d+/.test(v) && v !== 0 ? v : '',
     getStyle: function(x,y){
       const self = this;
-      const v = self.background[x][y];
 
-      if(/[A-Za-z]/.test(v))
+      if(self.background && self.background.length && /[A-Za-z]/.test(self.background[x][y]))
         return {
         backgroundColor:self.colors[self.background[x][y]],
         border:'1px solid '+self.colors[self.background[x][y]]

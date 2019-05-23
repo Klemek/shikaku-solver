@@ -86,9 +86,9 @@ const solver = (function(){
     loop:function(){
       if(self.queue.length > 0){
         let state = self.queue.shift();
-        self.process(state);
+        if(self.process(state))
+          self.workingCallback(state);
         self.processed++;
-        self.workingCallback(state);
         setTimeout(self.loop);
       }else{
         self.finishedCallback(self.solved);
@@ -113,19 +113,61 @@ const solver = (function(){
       let maxLetter;
       let x,y;
 
-      for (x = 0; x < W; x++) {
-        for (y = 0; y < H; y++) {
-          if (s[x][y] && /\d+/.test(s[x][y])) {
-            numbers.push({
-              m:s[x][y],
-              x:x,
-              y:y
-            });
+      let stop = false;
+      for (x = 0; x < W && !stop; x++) {
+        for (y = 0; y < H && !stop; y++) {
+          if (s[x][y]) {
+            if(/\d+/.test(s[x][y])){
+              numbers.push({
+                m:s[x][y],
+                x:x,
+                y:y
+              });
+            }else if(!maxLetter || s[x][y] > maxLetter){
+              maxLetter = s[x][y];
+            }
+          }else{ //empty cell
+            const walls = [0,0,0,0];
+            let number = false;
+            for(let d = 1; d < Math.max(W,H); d++){
+              if(!walls[0] && x-d >= 0 && s[x-d][y]){
+                walls[0] = d;
+                if(/\d+/.test(s[x-d][y])) {
+                  number = true;
+                  break;
+                }
+              }
+              if(!walls[1] && x+d < W && s[x+d][y]){
+                walls[1] = d;
+                if(/\d+/.test(s[x+d][y])) {
+                  number = true;
+                  break;
+                }
+              }
+              if(!walls[2] && y+d >= 0 && s[x][y-d]){
+                walls[2] = d;
+                if(/\d+/.test(s[x][y-d])) {
+                  number = true;
+                  break;
+                }
+              }
+              if(!walls[3] && y+d < H && s[x][y+d]){
+                walls[3] = d;
+                if(/\d+/.test(s[x][y+d])) {
+                  number = true;
+                  break;
+                }
+              }
+            }
+            if(!number && walls.filter(x => x === 1).length >= 3){
+              stop = true;
+            }
           }
-          if (/[A-Za-z]/.test(s[x][y]) && (!maxLetter || s[x][y] > maxLetter))
-            maxLetter = s[x][y];
         }
       }
+
+      if(stop)
+        return true;
 
       const letter = nextLetter(maxLetter);
       if (debug)
@@ -135,7 +177,7 @@ const solver = (function(){
         numbers[i].spaces = findSpaces(s, numbers[i].x, numbers[i].y);
         numbers[i].p = numbers[i].spaces.length;
         if(numbers[i].p === 0)
-          return;
+          return false;
       }
 
       numbers = numbers.sort((a,b) => a.p-b.p);
@@ -159,6 +201,7 @@ const solver = (function(){
         if(self.processed.length%10 === 0)
           console.log('found:',self.solved.length,'processed:',self.processed.length, 'comp:', (100*comp/(W*H)).toFixed(2)+'%', 'queue:',self.queue.length,'+'+numbers[0].p);
       }
+      return numbers.length > 0;
     }
   };
 
